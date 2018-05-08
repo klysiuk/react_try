@@ -2,34 +2,36 @@ import React, { Component } from 'react';
 import './App.css';
 import Title from './components/Title.js'
 import colors from './configs/colors.js';
-import Timeline from './timeline/timeline.js';
+import TimelineList from './components/TimelineList.js'
 
 class App extends Component {
    constructor(props) {
     super(props);
-    this.timelineArea = React.createRef();
+    this.state = {
+      timelines: [],
+      timelineNameCount: 0
+    }
   }
 
   createTimeline = (ev) => {
     ev.preventDefault();
 
-    let timeline = new Timeline();
+    // TODO add name in modal
+    let timeline = this.state.timelineNameCount+1;
 
-    timeline.render({
-      parentDomElem: this.timelineArea.current,
-      startingPoint: 5,
-      height: '300'
+    this.setState({
+      timelines: [...this.state.timelines, ...[timeline]],
+      timelineNameCount: this.state.timelineNameCount+1
     });
-    
   }
 
   render() {
 
     return (
-      <div className="App" ref={this.timelineArea}>  
-            <a href="#" onClick={this.createTimeline}>Create Timeline</a>   
+      <div className="App">  
+            <a href="#" onClick={this.createTimeline}>Create Timeline</a>
+            <TimelineList timelines={this.state.timelines}/>
       </div>
-
     );
   }
 }

@@ -13,6 +13,7 @@ addPeriod
 
 */
 import SVG from 'svg.js';
+import moment from 'moment';
 
 export default class Timeline {
 	render({parentDomElem, startingPoint, height}) {
@@ -30,8 +31,10 @@ export default class Timeline {
 			let quatersFromStart = (x-margin)/quaterWidth;
 			let currentHour = Math.floor(quatersFromStart/4) + this.startingPoint;
 			let minutes = (Math.floor(quatersFromStart)%4) * 15;
-			console.log(currentHour, minutes);
-
+	
+			this.domElem.dispatchEvent(new CustomEvent('userClickOnChart', { 
+				bubbles: true, detail: { time: moment(`${currentHour}:${minutes}`,'hh:mm') }
+			}))
 
 		}).bind(this);
 		this.svg.node.addEventListener("click", this.clickListener, false);
@@ -88,6 +91,10 @@ export default class Timeline {
 				(isHourTick ? yEndHour : yEnd)
 			).stroke({ width: 1 })
 		}
+	}
+
+	addSection({actionName, startTime, endTime}) {
+		console.log('section added!', actionName, startTime, endTime);
 	}
 	unrender() {
 		// TODO remove DOM elem
