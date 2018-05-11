@@ -1,4 +1,5 @@
 @import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+@import url('https://fonts.googleapis.com/css?family=Gothic+A1'); 
 
 body {
   margin: 0;
@@ -11,4 +12,8 @@ body {
 }
 .modal-container .modal, .modal-container .modal-backdrop {
   position: absolute;
+}
+
+.timeline {
+	padding-top: 30px;
 }

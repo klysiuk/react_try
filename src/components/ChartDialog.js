@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import Dialog from './Dialog.js';
 import { TimePicker } from 'antd';
 import 'antd/lib/time-picker/style/index.css';
-import { FormGroup, FormControl, ControlLabel} from 'react-bootstrap'
+import { FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
+import { CirclePicker } from 'react-color';
 
 export default class ChartDialog extends Component {
 	constructor(props) {
@@ -13,9 +14,10 @@ export default class ChartDialog extends Component {
       		startTime: props.startTime,
       		endTime: props.endTime || props.startTime
     	}
+
 	}
 
-	componentWillReceiveProps(props){
+	componentWillReceiveProps(props) { // Will be used for editing activity later
 	    this.setState({
 	    	actionName: props.actionName,
 	      	startTime: props.startTime,
@@ -23,19 +25,19 @@ export default class ChartDialog extends Component {
 	    })
 	}
 
-	handleChangeName = (event) => {
-		this.setState({
-			actionName: event.target.value
-		});
-	}
 
 	handleChangeTime = field => (time) => {
     	this.setState({ [field]: time });
   	}
 
+  	handleColorChange = (color) => {
+		this.setState({ color: color.hex });
+	};
+
 	submitResults = () => {
-		let {startTime, endTime, actionName} = this.state;
-		this.props.onSubmit({startTime, endTime, actionName});
+		let {startTime, endTime, color} = this.state;
+		// for some reason FormControl can not be controlled
+		this.props.onSubmit({startTime, endTime, color, actionName: this.inputName.value});
 	}
 
 	render() {
@@ -52,14 +54,19 @@ export default class ChartDialog extends Component {
 				        >
 				          <ControlLabel>Action name</ControlLabel>
 
+
 				          <FormControl
 				            type="text"
 				            value={actionName}
 				            placeholder="Enter text"
-				            onChange={this.handleChangeName}
+				            inputRef={ref => { this.inputName = ref; }}
 				          />
 			 
 				        </FormGroup>
+				         <FormGroup>
+				         	<CirclePicker color={ this.state.color } onChangeComplete={this.handleColorChange}/>
+				         </FormGroup>
+
 				        <FormGroup>
 
 					        <TimePicker 
